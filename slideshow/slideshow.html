@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Disruptor</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style type="text/css">
+      @import url(/css/YanoneKaffeesatz.css);
+      @import url(/css/DroidSerif.css);
+      @import url(/css/UbuntuMono.css);
+
+      body {
+        font-family: 'Droid Serif';
+      }
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: 400;
+        margin-bottom: 0;
+      }
+      .remark-slide-content h1 { font-size: 3em; }
+      .remark-slide-content h2 { font-size: 2em; }
+      .remark-slide-content h3 { font-size: 1.6em; }
+      .footnote {
+        position: absolute;
+        bottom: 3em;
+      }
+      li p { line-height: 1.25em; }
+      .red { color: #fa0000; }
+      .large { font-size: 2em; }
+      a, a > code {
+        color: rgb(249, 38, 114);
+        text-decoration: none;
+      }
+      code {
+        -moz-border-radius: 5px;
+        -web-border-radius: 5px;
+        background: #e7e8e2;
+        border-radius: 5px;
+      }
+      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+      .remark-code-line-highlighted     { background-color: #373832; }
+      .pull-left {
+        float: left;
+        width: 47%;
+      }
+      .pull-right {
+        float: right;
+        width: 47%;
+      }
+      .pull-right ~ p {
+        clear: both;
+      }
+      #slideshow .slide .content code {
+        font-size: 0.8em;
+      }
+      #slideshow .slide .content pre code {
+        font-size: 0.9em;
+        padding: 15px;
+      }
+      .inverse {
+        background: #272822;
+        color: #bababa;
+        text-shadow: 0 0 20px #333;
+      }
+      .inverse h1 {
+        color: #88be04;;
+        line-height: 0.8em;
+      }
+      .inverse h2 {
+        color: #a4cf29;
+        line-height: 0.8em;
+      }
+      
+      /* Slide-specific styling */
+      #slide-inverse .footnote {
+        bottom: 12px;
+        left: 20px;
+      }
+      #slide-how .slides {
+        font-size: 0.9em;
+        position: absolute;
+        top:  151px;
+        right: 140px;
+      }
+      #slide-how .slides h3 {
+        margin-top: 0.2em;
+      }
+      #slide-how .slides .first, #slide-how .slides .second {
+        padding: 1px 20px;
+        height: 90px;
+        width: 120px;
+        -moz-box-shadow: 0 0 10px #777;
+        -webkit-box-shadow: 0 0 10px #777;
+        box-shadow: 0 0 10px #777;
+      }
+      #slide-how .slides .first {
+        background: #fff;
+        position: absolute;
+        top: 20%;
+        left: 20%;
+        z-index: 1;
+      }
+      #slide-how .slides .second {
+        position: relative;
+        background: #fff;
+        z-index: 0;
+      }
+
+      /* Two-column layout */
+      .left-column {
+        float: left;
+        padding-left: 15%;
+      }
+      .left-column h2 {
+        position: relative;
+        top: 10%;
+      }
+      .right-column {
+        float: right;
+        padding-right: 15%;
+      }
+      .redit {
+        color: #f9265d;
+      }
+      .greenit {
+        color: #a4cf29;
+      }
+      .yellowit {
+        color: #eedc33;
+      }
+      .backblue {
+        background-color: #8fadde;
+      }
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+name: inverse
+layout: true
+class: center, middle, inverse
+
+---
+#DISRUPTOR
+##Your code on the metal
+
+.footnote[
+<img style="max-height : 30px;" src="./images/unilogo-white.png">
+.yellowit[ Andrea Peruffo]
+]
+---
+
+#Why?
+<br>
+Decrease latency
+<br>
+Ease concurrency management
+
+---
+
+#How?
+
+---
+
+#How?
+<br>
+... Ok a little bit of background ...
+---
+
+#Background
+##Hardware!
+
+---
+
+#Background
+Best performance staying on chip!
+---
+
+#Background
+##Processor Caches
+<br>
+L1 -> doesn't exists anymore
+---
+#Background
+##Processor Caches
+<br>
+L1 -> doesn't exists anymore
+<br>
+L2 -> CPU local
+---
+#Background
+##Processor Caches
+<br>
+L1 -> doesn't exists anymore
+<br>
+L2 -> CPU local
+##L3 -> on chip and shared through cores (size 8 -> 45? Mb)
+<img style="max-height:200px;" src="/images/l3_cache.jpg">
+<br>
+BTW: a “cache miss” is the biggest cost in HPC
+---
+#So what?
+Build an infrastructure that:
+<br>
+keep all in memory
+<br>
+support concurrency
+<br>
+take care of "Mechanical Sympaty" passing events/messages
+<br>
+write and test your code business logic like you are on single thread
+<br>
+---
+#Disruptor
+
+##Ring Buffer
+<img style="max-height:220px" src="/images/ring_buffer.jpg">
+<br>
+<br>
+LMAX joke:
+<br>
+Every problem in computer sience can be solved by adding another level of indirection .greenit[and a ring buffer] :-)
+---
+#Disruptor
+
+##Ring Buffer
+<img style="max-height:220px" src="/images/ring_buffer.jpg">
+<br>
+<br>
+Static allocation (no GC)
+<br>
+single copy for producer
+<br>
+multiple really fast reads (remember L3)
+<br>
+faster than std lib collections!
+---
+#Disruptor
+
+##EventPublisher
+<br>
+take care of "atomic" inserts in the ring buffer
+<br>
+##EventTranslator
+business logic to produce events
+
+<img style="max-height:250px" src="/images/pub_trans.jpg">
+---
+#Disruptor
+
+##EventProcessor
+<br>
+event loop handler (efficient impl BatchEventProcessor)
+<br>
+##EventHandler
+business logic to consume events
+
+<img style="max-height:250px" src="/images/sub_cons.jpg">
+---
+#Disruptor
+
+##SequenceBarrier
+<br>
+Abstraction to provide sync primitives for handlers
+
+<img style="max-height:250px" src="/images/seq.jpg">
+---
+#Disruptor
+
+a look at the code
+<br>
+AKA demo time :-)
+---
+
+##Links:
+
+- LMAX disruptor
+<br>
+https://github.com/LMAX-Exchange/disruptor
+<br>
+<br>
+- actor model comparison:
+<br>
+http://www.infoq.com/articles/High-Performance-Java-Inter-Thread-Communications
+---
+
+#Thanks and Q&A
+    </textarea>
+    <script src="/script/remark-latest.js">
+    </script>
+    <script>
+      var slideshow = remark.create();
+    </script>
+  </body>
+</html>
