@@ -53,7 +53,7 @@ WORKDIR /home/wetty
 
 RUN npm install
 
-RUN useradd -d /home/term -m -s /bin/bash term
+RUN useradd -d /home -m -s /bin/bash term
 
 RUN echo 'term:term' | chpasswd
 
@@ -70,6 +70,8 @@ RUN sbt compile
 WORKDIR /home/disruptor_talk
 
 EXPOSE 3000 8000
+
+RUN echo "root:root" | chpasswd
 
 CMD ["/bin/bash"]
 #CMD ["start.sh"]
