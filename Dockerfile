@@ -61,6 +61,8 @@ RUN apt-get install -y screen
 
 WORKDIR /home
 
+RUN rm -rf ./disruptor_talk
+
 RUN git clone https://github.com/andreaTP/disruptor_talk
 
 WORKDIR /home/disruptor_talk/code
