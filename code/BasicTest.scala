@@ -1,14 +1,9 @@
-
 import java.nio.ByteBuffer
-
 import java.util.concurrent.{Executor, Executors}
-
 import com.lmax.disruptor.{EventFactory, EventHandler, RingBuffer}
 import com.lmax.disruptor.dsl.Disruptor
 
 object Basic extends App {
-  println("Disruptor test!")
-
   val executor = Executors.newCachedThreadPool()
 
   val factory = new TimestampedLongEventFactory()
@@ -34,7 +29,6 @@ object Basic extends App {
       Thread.sleep(1000)
   }
 
-  println("quitting")
   System.exit(0)
 }
 

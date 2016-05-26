@@ -20,7 +20,7 @@ object Sequence extends App {
 
   val ringBuffer = disruptor.getRingBuffer()
 
-  
+  /*
     disruptor.handleEventsWith(
       (event: TimestampedLongEvent, sequence: Long, endOfBatch: Boolean) => {
           println("Event1: " + event)})
@@ -28,15 +28,15 @@ object Sequence extends App {
     disruptor.handleEventsWith(
       (event: TimestampedLongEvent, sequence: Long, endOfBatch: Boolean) => {
           println("Event2: " + event)})
+  */
   
-  /*
   disruptor.handleEventsWith(
     (event: TimestampedLongEvent, sequence: Long, endOfBatch: Boolean) => {
         println("Event1: " + event)}).then(
     (event: TimestampedLongEvent, sequence: Long, endOfBatch: Boolean) => {
         println("Event2: " + event)}
   )
-  */
+
   /*
   val barrier = ringBuffer.newBarrier()
 
@@ -68,6 +68,5 @@ object Sequence extends App {
       Thread.sleep(1000)
   }
 
-  println("quitting")
   System.exit(0)
 }

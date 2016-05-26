@@ -1,0 +1,227 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Disruptor</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/moon.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section data-markdown>
+				#DISRUPTOR
+				##Your code on the metal
+				</section>
+				<section data-markdown>
+					<script type="text/template">
+				  ##Who am I?
+				  ![alt text](./images/me_sleep.png "")<!-- .element: style="max-height: 180px" -->
+
+				  ![alt text](./images/unilogo-white.png "")<!-- .element: style="max-height: 80px" -->
+				  - GitHub [andreaTP]()
+				  - Twitter [@and_prf]()
+				  </script>
+				</section>
+				<section data-markdown>
+					<script type="text/template">
+					##Why should I care?
+					- Decrease latency<!-- .element: class="fragment" data-fragment-index="1" -->
+					- Ease concurrency management<!-- .element: class="fragment" data-fragment-index="2" -->
+					</script>
+				</section>
+				<section data-markdown>
+					<script type="text/template">
+					##How?
+					... Ok a little bit of background ...<!-- .element: class="fragment" data-fragment-index="1" -->
+					</script>
+				</section>
+				<section data-markdown>
+					<script type="text/template">
+					##Background
+					###Hardware!<!-- .element: class="fragment" data-fragment-index="1" -->
+					Best performance staying on chip!<!-- .element: class="fragment" data-fragment-index="2" -->
+					</script>
+				</section>
+				<section data-markdown>
+					<script type="text/template">
+						##Background
+						###Processor Caches
+						- L1 doesn't exists anymore<!-- .element: class="fragment" data-fragment-index="1" -->
+						- L2 CPU local<!-- .element: class="fragment" data-fragment-index="2" -->
+						- L3 on chip and shared through cores (size 8 -> 45? Mb)<!-- .element: class="fragment" data-fragment-index="3" -->
+						![alt text](./images/l3_cache.jpg "")<!-- .element: class="fragment" data-fragment-index="4" style="max-height: 180px" -->
+
+						BTW: a “cache miss” is the biggest cost in HPC<!-- .element: class="fragment" data-fragment-index="5" -->					
+						</script>
+				</section>
+				<section data-markdown>
+					<script type="text/template">
+					##So what?
+					###Build an infrastructure that:
+					- keep all in memory<!-- .element: class="fragment" data-fragment-index="1" -->
+					- support concurrency<!-- .element: class="fragment" data-fragment-index="2" -->
+					- take care of "Mechanical Sympaty"<!-- .element: class="fragment" data-fragment-index="3" -->
+					- ease write and test business code<!-- .element: class="fragment" data-fragment-index="4" -->
+					</script>
+				</section>
+				<section>
+					<section data-markdown>
+					<script type="text/template">
+						##Disruptor
+						###Ring Buffer<!-- .element: class="fragment" data-fragment-index="1" -->
+						![alt text](./images/ring_buffer.jpg "")<!-- .element: class="fragment" data-fragment-index="2" style="max-height: 200px"-->
+						<div>
+						LMAX inside joke:
+						Every problem in computer sience can be solved by adding another level of indirection and a ring buffer :-)
+						</div><!-- .element: class="fragment" data-fragment-index="3" -->
+					</script>
+					</section>
+					<section data-markdown>
+					<script type="text/template">
+						##Disruptor
+						###Ring Buffer
+						![alt text](./images/ring_buffer.jpg "")<!-- .element: style="max-height: 200px"-->
+						- Static allocation<!-- .element: class="fragment" data-fragment-index="1" -->
+						- Single copy<!-- .element: class="fragment" data-fragment-index="2" -->
+						- multiple reads<!-- .element: class="fragment" data-fragment-index="3" -->
+						- FAST!<!-- .element: class="fragment" data-fragment-index="4" -->
+					</script>
+					</section>
+				</section>
+				<section data-markdown>
+					<script type="text/template">
+					##Disruptor
+
+					###Event Publisher<!-- .element: class="fragment" data-fragment-index="1" -->
+					take care of "atomic" inserts in the ring buffer<!-- .element: class="fragment" data-fragment-index="1" -->
+				
+					###Event Translator<!-- .element: class="fragment" data-fragment-index="2" -->
+					business logic to produce events<!-- .element: class="fragment" data-fragment-index="2" -->
+
+					![alt text](./images/pub_trans.jpg "")<!-- .element: style="max-height: 200px"-->
+					</script>
+				</section>
+				<section data-markdown>
+					<script type="text/template">
+					##Disruptor
+
+					###Event Processor<!-- .element: class="fragment" data-fragment-index="1" -->
+					event loop handler (efficient impl BatchEventProcessor)<!-- .element: class="fragment" data-fragment-index="1" -->
+				
+					###Event Handler<!-- .element: class="fragment" data-fragment-index="2" -->
+					business logic to consume events<!-- .element: class="fragment" data-fragment-index="2" -->
+
+					![alt text](./images/sub_cons.jpg "")<!-- .element: style="max-height: 200px"-->
+					</script>
+				</section>
+				<section data-markdown>
+					<script type="text/template">
+					##Disruptor
+
+					###SequenceBarrier<!-- .element: class="fragment" data-fragment-index="1" -->
+					Abstraction to provide sync primitives for handlers<!-- .element: class="fragment" data-fragment-index="1" -->
+
+					![alt text](./images/seq.jpg "")<!-- .element: style="max-height: 200px"-->
+					</script>
+				</section>
+				<section>
+					<h2>DEMO</h2>
+				</section>
+				<section>
+					<h3>MESSAGE</h3>
+					<p>define an event</p>
+					<pre>
+						<code class="scala" data-code="http://localhost:8000/code/TimestampedLongEvent.scala"></code>
+					</pre>
+				</section>
+				<section>
+					<h4>Basic Implementation</h4>
+					<pre>
+						<code class="scala" data-code="http://localhost:8000/code/BasicTest.scala" data-trim></code>
+					</pre>
+					<iframe width="90%" src="http://localhost:4000/wetty/ssh/andrea"></iframe>
+				</section>
+				<section>
+					<h4>Java 8 Implementation</h4>
+					<pre>
+						<code class="scala" data-code="http://localhost:8000/code/Java8Test.scala" data-trim></code>
+					</pre>
+					<iframe width="90%" src="http://localhost:4000/wetty/ssh/andrea"></iframe>
+				</section>
+				<section>
+					<h4>Sequences usage</h4>
+					<pre>
+						<code class="scala" data-code="http://localhost:8000/code/Sequences.scala" data-trim></code>
+					</pre>
+					<iframe width="90%" src="http://localhost:4000/wetty/ssh/andrea"></iframe>
+				</section>
+				<section>
+					<h3>Benchmarks</h3>
+					<table>
+						<tr>
+							<td/><td>Array Blocking Queue</td><td>Disruptor</td>
+						</tr>
+						<tr>
+							<td>Unicast: 1P – 1C</td><td>4,057,453</td><td>22,381,378</td>
+						</tr>
+						<tr>
+							<td>Pipeline: 1P – 3C</td><td>2,006,903</td><td>15,857,913</td>
+						</tr>
+						<tr>
+							<td>Sequencer: 3P – 1C</td><td>2,056,118</td><td>14,540,519</td>
+						</tr>
+						<tr>
+							<td>Multicast: 1P – 3C</td><td>260,733</td><td>10,860,121</td>
+						</tr>
+						<tr>
+							<td>Diamond: 1P – 3C</td><td>2,082,725</td><td>15,295,197</td>
+						</tr>
+					</table>
+					<p>ops per sec</p>
+				</section>
+				<section data-markdown>
+					#Thanks
+					
+					LMAX Disruptor
+					
+					https://github.com/LMAX-Exchange/disruptor
+				</section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				history: true,
+
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: './plugin/externalcode/externalcode.js', condition: function() { return !!document.querySelector( '[data-code]' ); } }
+				]
+			});
+		</script>
+	</body>
+</html>

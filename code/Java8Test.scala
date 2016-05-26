@@ -16,8 +16,8 @@ object Java8 extends App {
     executor,
     ProducerType.SINGLE, // ProducerType.MULTI
     //new SleepingWaitStrategy()
-    new BlockingWaitStrategy()
-    //new BusySpinWaitStrategy()
+    //new BlockingWaitStrategy()
+    new BusySpinWaitStrategy()
     //new YieldingWaitStrategy()
     )
 
@@ -43,6 +43,5 @@ object Java8 extends App {
       Thread.sleep(1000)
   }
 
-  println("quitting")
   System.exit(0)
 }
