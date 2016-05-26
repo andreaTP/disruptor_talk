@@ -53,7 +53,7 @@ WORKDIR /home/wetty
 
 RUN npm install
 
-RUN useradd -d /home -m -s /bin/bash term
+RUN useradd -d /home/disruptor_talk -m -s /bin/bash term
 
 RUN echo 'term:term' | chpasswd
 
