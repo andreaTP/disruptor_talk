@@ -20,7 +20,10 @@ RUN apt-get update && \
     wget tar curl git \
     vim make \
     python \
-    openjdk-8-jdk
+    openjdk-8-jdk \
+    build-essential \
+    libkrb5-dev \
+    screen
 
 ENV JAVA_HOME /usr/lib/jvm/java-1.8.0-openjdk
 
@@ -37,10 +40,6 @@ RUN \
 RUN apt-get update && \
     apt-get -y install sbt
 
-RUN apt-get install -y build-essential
-
-RUN apt-get install -y libkrb5-dev
-
 RUN curl -sL https://deb.nodesource.com/setup_5.x | bash -
 
 RUN apt-get install -y nodejs
@@ -56,8 +55,6 @@ RUN npm install
 RUN useradd -d /home/disruptor_talk -m -s /bin/bash term
 
 RUN echo 'term:term' | chpasswd
-
-RUN apt-get install -y screen
 
 WORKDIR /home
 
@@ -76,4 +73,3 @@ EXPOSE 3000 8000
 RUN echo "root:root" | chpasswd
 
 CMD ["/bin/bash"]
-#CMD ["start.sh"]
